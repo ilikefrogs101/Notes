@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using ilikefrogs101.Notes.Note;
+using ilikefrogs101.Notes.NoteComponents;
 using ilikefrogs101.Notes.Data;
 
 namespace ilikefrogs101.Notes.Manager
@@ -22,11 +22,11 @@ namespace ilikefrogs101.Notes.Manager
         private Node _previewHolder;
 
         // Lists
-        private List<NoteData> _notes = new();
+        private List<Note> _notes = new();
         private List<ConnectionData> _connections = new();
 
         // Data
-        NoteData _connectionStart;
+        Note _connectionStart;
 
         public override void _Ready()
         {
@@ -47,14 +47,14 @@ namespace ilikefrogs101.Notes.Manager
             // Generate the ID
             // create a new NodeData with the generated ID and add it to the list
             string id = Guid.NewGuid().ToString();
-            NoteData data = new(id);
+            Note data = new(id);
             _notes.Add(data);
         }
 
         /// <summary>
         /// Creates and returns the window for a note based on the given NoteData
         /// </summary>
-        public NoteWindow CreateWindow(NoteData data)
+        public NoteWindow CreateWindow(Note data)
         {
             // Instantiate the a new window and assign the data before adding as a child
             NoteWindow window = _noteScene.Instantiate<NoteWindow>();
@@ -67,7 +67,7 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Creates and returns the preview for a note based on the given NoteData
         /// </summary>
-        public NotePreview CreatePreview(NoteData data)
+        public NotePreview CreatePreview(Note data)
         {
             // Instantiate a note preview, assign note data and add it as a child
             NotePreview preview = _previewScene.Instantiate<NotePreview>();
@@ -80,7 +80,7 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Creates a new connection or sets the connectionStart variable to the given NoteData
         /// </summary>
-        public void CreateConnection(NoteData data)
+        public void CreateConnection(Note data)
         {
             // If the connection start exists create a new connection otherwise set connection start to new data
             if (_connectionStart != null)
@@ -110,7 +110,7 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Returns the connection start variable
         /// </summary>
-        public NoteData GetConnectionStart()
+        public Note GetConnectionStart()
         {
             return _connectionStart;
         }

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 
-namespace ilikefrogs101.Notes.Note
+namespace ilikefrogs101.Notes.NoteComponents
 {
 	public partial class NoteWindow : Window
 	{
@@ -15,7 +15,7 @@ namespace ilikefrogs101.Notes.Note
 		[Export] ColorRect background;
 
 		// Data
-		public NoteData data;
+		public Note data;
 
 		public override void _Ready()
 		{

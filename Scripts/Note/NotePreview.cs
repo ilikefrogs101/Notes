@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using ilikefrogs101.Notes.Manager;
 
-namespace ilikefrogs101.Notes.Note
+namespace ilikefrogs101.Notes.NoteComponents
 {
 	public partial class NotePreview : Control
 	{
@@ -19,7 +19,7 @@ namespace ilikefrogs101.Notes.Note
 
 		// Data
 		Vector2 CursorOffset = new(60, 50);
-		public NoteData data;
+		public Note data;
 		bool mouseOver;
 		bool dragging = false;
 

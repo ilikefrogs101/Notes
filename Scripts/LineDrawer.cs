@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using ilikefrogs101.Notes.Data;
-using ilikefrogs101.Notes.Note;
+using ilikefrogs101.Notes.NoteComponents;
 
 namespace ilikefrogs101.Notes.Manager
 {
@@ -35,7 +35,7 @@ namespace ilikefrogs101.Notes.Manager
 			// Fetch the start of a new connection
 			// check if it exists
 			// draw line from the connection start to the mouse position
-			NoteData _connectionStart = NoteManager.Instance.GetConnectionStart();
+			Note _connectionStart = NoteManager.Instance.GetConnectionStart();
 			if (_connectionStart != null)
 			{
 				DrawLine(

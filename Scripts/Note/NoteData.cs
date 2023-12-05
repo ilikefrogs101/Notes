@@ -2,9 +2,9 @@ using Godot;
 using System;
 using ilikefrogs101.Notes.Manager;
 
-namespace ilikefrogs101.Notes.Note
+namespace ilikefrogs101.Notes.NoteComponents
 {
-	public partial class NoteData : Resource
+	public partial class Note : Resource
 	{
 		public string ID;
 		public string Title;
@@ -20,7 +20,7 @@ namespace ilikefrogs101.Notes.Note
 		/// <summary>
 		/// Creates a note based on pre existing data
 		/// </summary>
-		public NoteData(string title, string contents, Color colour, string id, bool windowVisible, Vector2 windowPosition)
+		public Note(string title, string contents, Color colour, string id, bool windowVisible, Vector2 windowPosition)
 		{
 			Title = title;
 			Contents = contents;
@@ -37,7 +37,7 @@ namespace ilikefrogs101.Notes.Note
 		/// <summary>
 		/// Creates a brand new note
 		/// </summary>
-		public NoteData(string id)
+		public Note(string id)
 		{
 			Title = "New Note";
 			Contents = "";
