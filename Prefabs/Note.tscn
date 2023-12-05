@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://1c71ws8otqtv"]
+
+[ext_resource type="Script" path="res://Scripts/Note/NoteWindow.cs" id="1_uiuqk"]
+
+[node name="Note" type="Window" node_paths=PackedStringArray("titleEntry", "text", "colourButton", "background")]
+disable_3d = true
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+position = Vector2i(0, 36)
+size = Vector2i(300, 300)
+always_on_top = true
+max_size = Vector2i(1920, 1080)
+script = ExtResource("1_uiuqk")
+titleEntry = NodePath("TitleEntry")
+text = NodePath("Text")
+colourButton = NodePath("ColourButton")
+background = NodePath("Background")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.241877, 0.40117, 1)
+
+[node name="TitleEntry" type="LineEdit" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 55.0
+offset_top = 1.5
+offset_right = -5.0
+offset_bottom = 32.5
+grow_horizontal = 2
+
+[node name="ColourButton" type="ColorPickerButton" parent="."]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 47.0
+offset_bottom = 29.0
+
+[node name="Text" type="CodeEdit" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 37.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+symbol_lookup_on_click = true
+line_folding = true
+gutters_draw_line_numbers = true
+gutters_draw_fold_gutter = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
