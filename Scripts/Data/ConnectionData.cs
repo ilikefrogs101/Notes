@@ -1,8 +1,12 @@
 using Godot;
 using System;
+using ilikefrogs101.Notes.Note;
 
-public partial class ConnectionData : Resource
+namespace ilikefrogs101.Notes.Data
 {
-	public NoteData start;
-	public NoteData end;
+	public partial class ConnectionData : Resource
+	{
+		public NoteData start;
+		public NoteData end;
+	}
 }

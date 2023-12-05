@@ -1,21 +1,25 @@
 using Godot;
 using System;
+using ilikefrogs101.Notes.Manager;
 
-public partial class NoteUI : Node
+namespace ilikefrogs101.Notes.UI
 {
-	[ExportGroup("UI")]
-	[Export] Button newNoteButton;
-
-    public override void _Ready()
-    {
-        newNoteButton.Pressed += CreateNote;
-    }
-
-	/// <summary>
-    /// Creates a new note
-    /// </summary>
-	public void CreateNote()
+	public partial class NoteUI : Node
 	{
-		NoteManager.Instance.CreateNote();
+		[ExportGroup("UI")]
+		[Export] Button newNoteButton;
+
+		public override void _Ready()
+		{
+			newNoteButton.Pressed += CreateNote;
+		}
+
+		/// <summary>
+		/// Creates a new note
+		/// </summary>
+		public void CreateNote()
+		{
+			NoteManager.Instance.CreateNote();
+		}
 	}
 }

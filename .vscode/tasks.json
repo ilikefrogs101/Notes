@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "/nix/store/2asn1dzx9yv71vhmkhxm6843sv6309ci-godot4-mono-4.1.1/bin/godot4-mono",
+            "type": "process",
+            "args": [
+                "--build-solutions",
+                "--path",
+                "${workspaceRoot}",
+                "--no-window",
+                "-q"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

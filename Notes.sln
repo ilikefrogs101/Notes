@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notes", "Notes.csproj", "{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{F8D795CC-9B5F-4EAF-BCE9-ACA9BF5611FA}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
