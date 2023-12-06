@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using ilikefrogs101.Notes.NoteComponents;
 using ilikefrogs101.Notes.Data;
+using System.Linq;
 
 namespace ilikefrogs101.Notes.Manager
 {
@@ -11,22 +12,22 @@ namespace ilikefrogs101.Notes.Manager
         public static NoteManager Instance;
 
         // Node Paths
-        private string _notePath = "res://Prefabs/Note.tscn";
-        private string _previewPath = "res://Prefabs/Preview.tscn";
-        private string _previewHolderPath = "CanvasLayer/PreviewHolder";
+        private const string _notePath = "res://Prefabs/Note.tscn";
+        private const string _previewPath = "res://Prefabs/Preview.tscn";
+        private const string _previewHolderPath = "CanvasLayer/PreviewHolder";
 
         // Nodes and prefabs
         private PackedScene _noteScene;
         private PackedScene _previewScene;
         private Node _noteHolder;
-        private Node _previewHolder;
+        private Control _previewHolder;
 
         // Lists
-        private List<Note> _notes = new();
-        private List<ConnectionData> _connections = new();
+        private readonly List<Note> _notes = new();
+        private readonly List<ConnectionData> _connections = new();
 
         // Data
-        Note _connectionStart;
+        private Note _connectionStart;
 
         public override void _Ready()
         {
@@ -36,7 +37,14 @@ namespace ilikefrogs101.Notes.Manager
             _noteScene = GD.Load<PackedScene>(_notePath);
             _previewScene = GD.Load<PackedScene>(_previewPath);
             _noteHolder = GetTree().CurrentScene;
-            _previewHolder = _noteHolder.GetNode(_previewHolderPath);
+            _previewHolder = _noteHolder.GetNode<Control>(_previewHolderPath);
+
+            // Tell the preview holder to draw with our custom function
+            _previewHolder.Draw += DrawConnections;
+        }
+        public override void _PhysicsProcess(double delta)
+        {
+            _previewHolder.QueueRedraw();
         }
 
         /// <summary>
@@ -100,22 +108,6 @@ namespace ilikefrogs101.Notes.Manager
         }
 
         /// <summary>
-        /// Returns the list of connections
-        /// </summary>
-        public ConnectionData[] GetConnections()
-        {
-            return _connections.ToArray();
-        }
-
-        /// <summary>
-        /// Returns the connection start variable
-        /// </summary>
-        public Note GetConnectionStart()
-        {
-            return _connectionStart;
-        }
-
-        /// <summary>
         /// Returns whether a certain connection should be removed due to a preview not existing
         /// </summary>
         public bool ShouldRemove(ConnectionData connection)
@@ -124,20 +116,44 @@ namespace ilikefrogs101.Notes.Manager
         }
 
         /// <summary>
-        /// Removes a connection from the list of connections
+        /// Draws the list of connections between notes
         /// </summary>
-        public void RemoveConnection(ConnectionData connection)
-        {
-            if(ConnectionExists(connection))
-                _connections.Remove(connection);
-        }
+        public void DrawConnections()
+		{
+			// Fetch the connections and store as an array
+			// go through each connection
+			// remove it if it is invalid
+			// draw the line
+			ConnectionData[] connections = _connections.ToArray();
+			foreach (ConnectionData connection in connections)
+			{
+				if(ShouldRemove(connection)) 
+                { 
+                    _connections.Remove(connection); 
+                    break; 
+                }
 
-        /// <summary>
-        /// Returns whether a connection exists
-        /// </summary>
-        public bool ConnectionExists(ConnectionData connection)
-        {
-            return _connections.Contains(connection);
-        }
+				_previewHolder.DrawLine(
+					connection.start.preview.GlobalPosition + connection.start.preview.Size, 
+					connection.end.preview.GlobalPosition + connection.end.preview.Size,
+					new Color(0, 0, 0), 
+					2,
+					true
+				);
+			}
+
+			// Check if the user is creating a new connection
+			// draw line from the connection start to the mouse position
+			if (_connectionStart != null)
+			{
+				_previewHolder.DrawLine(
+					_connectionStart.preview.GlobalPosition + _connectionStart.preview.Size, 
+					GetViewport().GetMousePosition(), 
+					new Color(0, 0, 0),
+					2,
+					true
+				);
+			}
+		}
     }
 }
