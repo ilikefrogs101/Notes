@@ -138,8 +138,8 @@ namespace ilikefrogs101.Notes.Manager
                 }
 
 				_previewHolder.DrawLine(
-					connection.start.preview.GlobalPosition + connection.start.preview.Size, 
-					connection.end.preview.GlobalPosition + connection.end.preview.Size,
+					connection.start.preview.Position + connection.start.preview.Size, 
+					connection.end.preview.Position + connection.end.preview.Size,
 					new Color(0, 0, 0), 
 					2,
 					true
@@ -151,8 +151,8 @@ namespace ilikefrogs101.Notes.Manager
 			if (_connectionStart != null)
 			{
 				_previewHolder.DrawLine(
-					_connectionStart.preview.GlobalPosition + _connectionStart.preview.Size, 
-					GetViewport().GetMousePosition(), 
+					_connectionStart.preview.Position + _connectionStart.preview.Size, 
+					_previewHolder.GetLocalMousePosition(),
 					new Color(0, 0, 0),
 					2,
 					true
