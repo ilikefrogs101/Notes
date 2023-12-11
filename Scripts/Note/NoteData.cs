@@ -20,6 +20,13 @@ namespace ilikefrogs101.Notes.NoteComponents
 		/// <summary>
 		/// Creates a note based on pre existing data
 		/// </summary>
+		/// <param name="title">The notes title</param>
+        /// <param name="contents">The notes contents</param>
+        /// <param name="colour">The notes colour</param>
+        /// <param name="id">The notes ID</param>
+        /// <param name="windowVisible">If the window should be instantly created or not</param>
+        /// <param name="windowPosition">The position of the window</param>
+
 		public Note(string title, string contents, Color colour, string id, bool windowVisible, Vector2 windowPosition)
 		{
 			Title = title;
@@ -30,13 +37,16 @@ namespace ilikefrogs101.Notes.NoteComponents
 			WindowPosition = windowPosition;
 			
 			CreatePreview();
-			if(windowVisible)
-				CreateWindow();
+			CreateWindow();
+
+			if(!windowVisible)
+				window.Hide();
 		}
 
 		/// <summary>
 		/// Creates a brand new note
 		/// </summary>
+		/// <param name="id">The new GUID for the note</param>
 		public Note(string id)
 		{
 			Title = "New Note";
@@ -48,6 +58,9 @@ namespace ilikefrogs101.Notes.NoteComponents
 
 			CreatePreview();
 			CreateWindow();
+
+			WindowVisible = false;
+			window.Hide();
 		}
 
 		/// <summary>
@@ -75,27 +88,27 @@ namespace ilikefrogs101.Notes.NoteComponents
 
 		public void CallOnTitle()
 		{
-			OnTitleChanged.Invoke();
+			OnTitleChanged?.Invoke();
 		}
 		public void CallOnContents()
 		{
-			OnContentsChanged.Invoke();
+			OnContentsChanged?.Invoke();
 		}
 		public void CallConnectionCreate()
 		{
-			OnConnectionCreate.Invoke();
+			OnConnectionCreate?.Invoke();
 		}
 		public void CallConnectionDelete()
 		{
-			OnConnectionDelete.Invoke();
+			OnConnectionDelete?.Invoke();
 		}
 		public void CallNoteDelete()
 		{
-			OnNoteDelete.Invoke();
+			OnNoteDelete?.Invoke();
 		}
 		public void CallOnColour()
 		{
-			OnColourChanged.Invoke();
+			OnColourChanged?.Invoke();
 		}
 	}
 }

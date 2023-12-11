@@ -62,11 +62,12 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Creates and returns the window for a note based on the given NoteData
         /// </summary>
-        public NoteWindow CreateWindow(Note data)
+        /// <param name="note">The note to create a window for</param>
+        public NoteWindow CreateWindow(Note note)
         {
             // Instantiate the a new window and assign the data before adding as a child
             NoteWindow window = _noteScene.Instantiate<NoteWindow>();
-            window.data = data;
+            window.data = note;
             _noteHolder.AddChild(window);
 
             return window;
@@ -75,11 +76,12 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Creates and returns the preview for a note based on the given NoteData
         /// </summary>
-        public NotePreview CreatePreview(Note data)
+        /// <param name="note">The note to create a preview for</param>
+        public NotePreview CreatePreview(Note note)
         {
             // Instantiate a note preview, assign note data and add it as a child
             NotePreview preview = _previewScene.Instantiate<NotePreview>();
-            preview.data = data;
+            preview.data = note;
             _previewHolder.AddChild(preview);
 
             return preview;
@@ -88,7 +90,8 @@ namespace ilikefrogs101.Notes.Manager
         /// <summary>
         /// Creates a new connection or sets the connectionStart variable to the given NoteData
         /// </summary>
-        public void CreateConnection(Note data)
+        /// <param name="note">The Note to either connect to or start a connection from</param>
+        public void CreateConnection(Note note)
         {
             // If the connection start exists create a new connection otherwise set connection start to new data
             if (_connectionStart != null)
@@ -96,23 +99,24 @@ namespace ilikefrogs101.Notes.Manager
                 ConnectionData connectionData = new()
                 {
                     start = _connectionStart,
-                    end = data
+                    end = note
                 };
                 _connections.Add(connectionData);
                 _connectionStart = null;
             }
             else
             {
-                _connectionStart = data;
+                _connectionStart = note;
             }
         }
 
         /// <summary>
-        /// Returns whether a certain connection should be removed due to a preview not existing
+        /// Returns true if a given connection is valid and false if it isnt
         /// </summary>
-        public bool ShouldRemove(ConnectionData connection)
+        /// <param name="connection">The connection to check the validity of</param>
+        public bool ConnectionValid(ConnectionData connection)
         {
-            return !IsInstanceValid(connection.start.preview) || !IsInstanceValid(connection.end.preview); 
+            return IsInstanceValid(connection.start.preview) && IsInstanceValid(connection.end.preview); 
         }
 
         /// <summary>
@@ -127,7 +131,7 @@ namespace ilikefrogs101.Notes.Manager
 			ConnectionData[] connections = _connections.ToArray();
 			foreach (ConnectionData connection in connections)
 			{
-				if(ShouldRemove(connection)) 
+				if(!ConnectionValid(connection))
                 { 
                     _connections.Remove(connection); 
                     break; 

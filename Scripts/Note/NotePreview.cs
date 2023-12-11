@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 using ilikefrogs101.Notes.Manager;
+using ilikefrogs101.Notes;
 
 namespace ilikefrogs101.Notes.NoteComponents
 {
@@ -15,21 +16,19 @@ namespace ilikefrogs101.Notes.NoteComponents
 
 		[ExportGroup("Visuals")]
 		[Export] ColorRect background;
-		[Export] public Line2D connection;
 
 		// Data
 		Vector2 CursorOffset = new(60, 50);
 		public Note data;
-		bool mouseOver;
-		bool dragging = false;
+		bool mouseOverPreview;
 
 		public override void _Ready()
 		{
 			text.Text = data.Contents;
 
 			deleteButton.Pressed += DeleteNote;
-			mouseDetector.MouseEntered += PreviewEntered;
-			mouseDetector.MouseExited += PreviewExited;
+			mouseDetector.MouseEntered += () => mouseOverPreview = true;
+			mouseDetector.MouseExited += () => mouseOverPreview = false;
 
 			data.OnContentsChanged += ContentsChanged;
 			data.OnTitleChanged += ContentsChanged;
@@ -38,33 +37,67 @@ namespace ilikefrogs101.Notes.NoteComponents
 			background.Color = data.Colour;
 			text.Text = $"{data.Title}\n \n{data.Contents}";
 		}
+        public override void _ExitTree()
+        {
+            deleteButton.Pressed -= DeleteNote;
+			mouseDetector.MouseEntered -= () => mouseOverPreview = true;
+			mouseDetector.MouseExited -= () => mouseOverPreview = false;
+
+			data.OnContentsChanged -= ContentsChanged;
+			data.OnTitleChanged -= ContentsChanged;
+			data.OnColourChanged -= ColourChanged;
+        }
+        
 		public override void _Process(double delta)
 		{
-			// Dragging
-			if(mouseOver && Input.IsActionJustPressed("move_note"))
-				dragging = true;
-			else if(mouseOver && dragging && Input.IsActionJustReleased("move_note"))
-				dragging = false;
-
-			if(dragging)
-				GlobalPosition = GetGlobalMousePosition() - CursorOffset;
-			
 			// Clamp position inside the window
 			GlobalPosition = GlobalPosition.Clamp(
-						Vector2.Zero, 
-						new Vector2(GetViewportRect().Size.X - (Size.X * 4f), GetViewportRect().Size.Y - (Size.Y * 3f)));
+				Vector2.Zero, 
+				new Vector2(
+					GetViewportRect().Size.X - (Size.X * 4f), 
+					GetViewportRect().Size.Y - (Size.Y * 3f)
+				)
+			);
+			
+			if(MoveNote()) return;
+			if(ConnectNote()) return;
+			if(OpenNote()) return;
+		}
 
-			if(!mouseOver) { return; }
-			// Connections		
-			if(Input.IsActionJustPressed("select_note") && !dragging) {
-				NoteManager.Instance.CreateConnection(data);
-				return;
+		bool beingMoved = false;
+		bool MoveNote()
+		{
+			if(Input.IsActionJustPressed("move_note") && mouseOverPreview)
+				beingMoved = true;
+			else if(Input.IsActionJustReleased("move_note"))
+				beingMoved = false;
+			
+			if(beingMoved)
+			{
+				GlobalPosition = GetGlobalMousePosition() - CursorOffset;
+				return true;
 			}
 
-			// Interacting
-			if(Input.IsActionJustPressed("open_note") && !dragging)
-				if(!data.WindowVisible)
-					data.window.Show();
+			return false;
+		}
+		bool ConnectNote()
+		{
+			if(Input.IsActionJustPressed("connect_note") && mouseOverPreview)
+			{
+				NoteManager.Instance.CreateConnection(data);
+				return true;
+			}
+
+			return false;
+		}
+		bool OpenNote()
+		{
+			if(Input.IsActionJustPressed("open_note") && !data.WindowVisible && mouseOverPreview)
+			{
+				data.window.Show();
+				return true;
+			}
+			return false;
 		}
 
 		void DeleteNote()
@@ -75,11 +108,11 @@ namespace ilikefrogs101.Notes.NoteComponents
 		}
 		void PreviewEntered()
 		{
-			mouseOver = true;
+			mouseOverPreview = true;
 		}	
 		void PreviewExited()
 		{
-			mouseOver = false;
+			mouseOverPreview = false;
 		}
 
 		void ContentsChanged()
