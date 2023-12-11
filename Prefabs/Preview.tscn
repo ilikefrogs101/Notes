@@ -23,6 +23,7 @@ deleteButton = NodePath("Delete")
 background = NodePath("Background")
 
 [node name="Delete" type="Button" parent="."]
+layout_mode = 0
 offset_left = 40.0
 offset_right = 54.0
 offset_bottom = 40.0
@@ -31,15 +32,18 @@ theme_override_font_sizes/font_size = 52
 text = "-"
 
 [node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Darkener" type="ColorRect" parent="."]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 0.45098)
 
 [node name="Content" type="Label" parent="."]
+layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 153.0
@@ -50,6 +54,7 @@ clip_text = true
 text_overrun_behavior = 1
 
 [node name="HoverDetection" type="Area2D" parent="."]
+position = Vector2(0.333333, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HoverDetection"]
 position = Vector2(20, 20)

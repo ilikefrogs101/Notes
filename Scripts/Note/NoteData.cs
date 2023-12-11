@@ -59,6 +59,8 @@ namespace ilikefrogs101.Notes.NoteComponents
 			CreatePreview();
 			CreateWindow();
 
+			preview.Position = MainCamera._camera.Offset;
+
 			WindowVisible = false;
 			window.Hide();
 		}

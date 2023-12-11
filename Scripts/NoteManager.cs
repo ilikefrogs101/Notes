@@ -14,7 +14,7 @@ namespace ilikefrogs101.Notes.Manager
         // Node Paths
         private const string _notePath = "res://Prefabs/Note.tscn";
         private const string _previewPath = "res://Prefabs/Preview.tscn";
-        private const string _previewHolderPath = "CanvasLayer/PreviewHolder";
+        private const string _previewHolderPath = "PreviewHolder";
 
         // Nodes and prefabs
         private PackedScene _noteScene;
@@ -23,7 +23,7 @@ namespace ilikefrogs101.Notes.Manager
         private Control _previewHolder;
 
         // Lists
-        private readonly List<Note> _notes = new();
+        public readonly List<Note> _notes = new();
         private readonly List<ConnectionData> _connections = new();
 
         // Data

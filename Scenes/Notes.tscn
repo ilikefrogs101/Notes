@@ -1,33 +1,72 @@
-[gd_scene load_steps=4 format=3 uid="uid://cosyfpwrdq677"]
+[gd_scene load_steps=9 format=3 uid="uid://cosyfpwrdq677"]
 
+[ext_resource type="Script" path="res://Scripts/MainCamera.cs" id="1_3wl37"]
 [ext_resource type="Script" path="res://Scripts/UI/NoteUI.cs" id="1_pn6o6"]
 [ext_resource type="Texture2D" uid="uid://bd5p5lo4a5wi4" path="res://Art/PlusSign.png" id="3_l8w2v"]
+[ext_resource type="Script" path="res://Scripts/UI/GridGenerator.cs" id="3_njuit"]
+[ext_resource type="Script" path="res://Scripts/UI/XRuler.cs" id="4_4l0ht"]
+[ext_resource type="Script" path="res://Scripts/UI/YRuler.cs" id="5_v527w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x30cs"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 draw_center = false
 
+[sub_resource type="LabelSettings" id="LabelSettings_xhdrv"]
+
 [node name="Notes" type="Node2D"]
 position = Vector2(-10, 22)
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(360, 328)
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("X", "Y")]
+position = Vector2(350, 350)
+script = ExtResource("1_3wl37")
+cameraSpeed = 5.0
+X = NodePath("../CanvasLayer/X")
+Y = NodePath("../CanvasLayer/Y")
 
 [node name="NoteManager" type="Node2D" parent="." node_paths=PackedStringArray("newNoteButton")]
 script = ExtResource("1_pn6o6")
 newNoteButton = NodePath("../CanvasLayer/NewNote")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="PreviewHolder" type="Control" parent="CanvasLayer"]
+[node name="Grid" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_njuit")
+
+[node name="Xruler" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_4l0ht")
+
+[node name="Yruler" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_v527w")
+
+[node name="PreviewHolder" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 350.0
+offset_top = 350.0
+offset_right = 350.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="NewNote" type="Button" parent="CanvasLayer"]
 offset_left = 10.0
@@ -37,3 +76,57 @@ offset_bottom = 42.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_x30cs")
 icon = ExtResource("3_l8w2v")
 expand_icon = true
+
+[node name="XBar" type="ColorRect" parent="CanvasLayer"]
+top_level = true
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(1, 1, 1, 0.392157)
+
+[node name="YBar" type="ColorRect" parent="CanvasLayer"]
+top_level = true
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -1.0
+offset_bottom = -31.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(1, 1, 1, 0.392157)
+
+[node name="X" type="Label" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_xhdrv")
+horizontal_alignment = 1
+
+[node name="Y" type="Label" parent="CanvasLayer"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -13.0
+offset_right = -4.0
+offset_bottom = 13.0
+grow_horizontal = 0
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_xhdrv")
+horizontal_alignment = 2

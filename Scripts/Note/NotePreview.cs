@@ -3,12 +3,16 @@ using System;
 using System.Collections;
 using ilikefrogs101.Notes.Manager;
 using ilikefrogs101.Notes;
+using System.Collections.Generic;
 
 namespace ilikefrogs101.Notes.NoteComponents
 {
 	public partial class NotePreview : Control
 	{
 		[Export] Area2D mouseDetector;
+
+		[ExportGroup("Settings")]
+		[Export] float repelForce = 7.5f;
 
 		[ExportGroup("Editable Components")]
 		[Export] Label text;
@@ -18,10 +22,11 @@ namespace ilikefrogs101.Notes.NoteComponents
 		[Export] ColorRect background;
 
 		// Data
-		Vector2 CursorOffset = new(60, 50);
+		Vector2 CursorOffset = new(40, 40);
 		public Note data;
+		private List<Control> collidingNotes = new();
 		bool mouseOverPreview;
-
+		
 		public override void _Ready()
 		{
 			text.Text = data.Contents;
@@ -30,6 +35,8 @@ namespace ilikefrogs101.Notes.NoteComponents
 			mouseDetector.MouseEntered += () => mouseOverPreview = true;
 			mouseDetector.MouseExited += () => mouseOverPreview = false;
 
+			mouseDetector.AreaEntered += OnCollisionStart;
+			mouseDetector.AreaExited += OnCollisionEnd;
 			data.OnContentsChanged += ContentsChanged;
 			data.OnTitleChanged += ContentsChanged;
 			data.OnColourChanged += ColourChanged;
@@ -49,20 +56,32 @@ namespace ilikefrogs101.Notes.NoteComponents
         }
         
 		public override void _Process(double delta)
-		{
-			// Clamp position inside the window
-			GlobalPosition = GlobalPosition.Clamp(
-				Vector2.Zero, 
-				new Vector2(
-					GetViewportRect().Size.X - (Size.X * 4f), 
-					GetViewportRect().Size.Y - (Size.Y * 3f)
-				)
-			);
-			
+		{			
 			if(MoveNote()) return;
 			if(ConnectNote()) return;
 			if(OpenNote()) return;
 		}
+        public override void _PhysicsProcess(double delta)
+        {
+            // Handle collisions so notes can't overlap
+			if(collidingNotes.Count > 0)
+			{
+				foreach(Control collidingNote in collidingNotes)
+				{
+					if(collidingNote == null) { collidingNotes.Remove(collidingNote); continue; }
+
+
+					GlobalPosition = GlobalPosition.Lerp(
+						GlobalPosition - (collidingNote.GlobalPosition - GlobalPosition).Normalized() * repelForce, 
+						0.75f
+					);
+					collidingNote.GlobalPosition = collidingNote.GlobalPosition.Lerp(
+						collidingNote.GlobalPosition - (GlobalPosition - collidingNote.GlobalPosition).Normalized() * repelForce, 
+						0.75f
+					);
+				}
+			}
+        }
 
 		bool beingMoved = false;
 		bool MoveNote()
@@ -75,10 +94,9 @@ namespace ilikefrogs101.Notes.NoteComponents
 			if(beingMoved)
 			{
 				GlobalPosition = GetGlobalMousePosition() - CursorOffset;
-				return true;
 			}
 
-			return false;
+			return beingMoved;
 		}
 		bool ConnectNote()
 		{
@@ -100,6 +118,14 @@ namespace ilikefrogs101.Notes.NoteComponents
 			return false;
 		}
 
+		void OnCollisionStart(Area2D area)
+		{
+			collidingNotes.Add(area.GetParent<Control>());
+		}
+		void OnCollisionEnd(Area2D area)
+		{
+			collidingNotes.Remove(area.GetParent<Control>());
+		}
 		void DeleteNote()
 		{
 			QueueFree();
